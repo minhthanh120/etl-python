@@ -1,4 +1,4 @@
-from common.base import session
+from base import session
 
 # Create the view with the appropriate metrics
 query = """

@@ -2,6 +2,8 @@ import extract, transform, load
 from airflow.models.dag import DAG
 from airflow.decorators import task
 from airflow.utils.task_group import TaskGroup
+from datetime import datetime
+import logging
 
 with DAG(dag_id="transform_new_data", start_date=datetime(2023, 1, 9), catchup=False, tags=["model"]) as transform_src:
     with TaskGroup("extract", tooltip="Extract from source data") as ex_from_src:

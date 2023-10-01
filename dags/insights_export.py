@@ -1,8 +1,8 @@
 from datetime import datetime
 import os
 
-from plugins.base import session
-from plugins.tables import PprCleanAll
+from base import session
+from models import PprCleanAll
 import xlsxwriter
 
 

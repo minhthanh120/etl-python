@@ -2,8 +2,8 @@ import os
 import csv
 from datetime import datetime
 import logging
-from plugins.models import PprRawAll
-from plugins.base import session
+from models import PprRawAll
+from base import session
 from sqlalchemy import text
 from airflow.models.dag import DAG
 from airflow.decorators import task

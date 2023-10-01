@@ -1,5 +1,5 @@
-from plugins.base import session
-from plugins.tables import PprRawAll, PprCleanAll
+from base import session
+from models import PprRawAll, PprCleanAll
 from airflow.models.dag import DAG
 from airflow.decorators import task
 from airflow.utils.task_group import TaskGroup

@@ -2,11 +2,12 @@
 from sqlalchemy import cast, Column, Integer, String, Date
 from sqlalchemy.orm import column_property, column_property
 
-from common.base import Base
+from base import Base
 
 
 class PprRawAll(Base):
     __tablename__ = "ppr_raw_all"
+    __table_args__ = {'extend_existing': True} 
 
     id = Column(Integer, primary_key=True)
     date_of_sale = Column(String(55))
@@ -21,6 +22,7 @@ class PprRawAll(Base):
 
 
 class PprCleanAll(Base):
+    __table_args__ = {'extend_existing': True} 
     __tablename__ = "ppr_clean_all"
 
     id = Column(Integer, primary_key=True)

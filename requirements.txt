@@ -1,4 +1,5 @@
-request
 numpy
 pandas
 matplotlib
+apache-airflow[postgres,slack,celery,sqlserver]
+faker
