@@ -16,13 +16,12 @@ source_path = f"{base_path}/data/source/downloaded_at=2021-02-01/PPR-ALL.zip"
 
 raw_path = f"{base_path}/data/raw/downloaded_at=2021-02-01/ppr-all.csv"
 
-@task
 def create_folder_if_not_exists(path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
 @task
 def download_snapshot():
-    create_folder_if_not_exists(source_path)
+    os.makedirs(os.path.dirname(source_path), exist_ok=True)
     with open(source_path, "wb") as source_ppr:
         response = requests.get(source_url, verify=False)
         source_ppr.write(response.content)
@@ -31,10 +30,7 @@ def download_snapshot():
 def save_new_raw_data():
     create_folder_if_not_exists(raw_path)
     with tempfile.TemporaryDirectory() as dirpath:
-        with ZipFile(
-            source_path,
-            "r",
-        ) as zipfile:
+        with ZipFile(source_path,"r",) as zipfile:
             names_list = zipfile.namelist()
             csv_file_path = zipfile.extract(names_list[0], path=dirpath)
             with open(csv_file_path, mode="r", encoding="windows-1252") as csv_file:

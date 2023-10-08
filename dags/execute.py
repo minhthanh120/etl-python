@@ -3,6 +3,7 @@ from airflow.models.dag import DAG
 from airflow.decorators import task
 from airflow.utils.task_group import TaskGroup
 from datetime import datetime
+from create_tables import create_dbtable
 import logging
 
 with DAG(dag_id="transform_new_data", start_date=datetime(2023, 1, 9), catchup=False, tags=["model"]) as transform_src:
@@ -10,7 +11,7 @@ with DAG(dag_id="transform_new_data", start_date=datetime(2023, 1, 9), catchup=F
         logging.info("[Extract] Start")
         logging.info("[Extract] Downloading snapshot")
         download_snapshot = extract.download_snapshot()
-        logging.info(f"[Extract] Saving data from '{source_path}' to '{raw_path}'")
+        logging.info(f"[Extract] Saving data from '{extract.source_path}' to '{extract.raw_path}'")
         save_new_raw_data = extract.save_new_raw_data()
         logging.info(f"[Extract] End")
         download_snapshot >> save_new_raw_data
@@ -34,3 +35,9 @@ with DAG(dag_id="transform_new_data", start_date=datetime(2023, 1, 9), catchup=F
         insert_transactions >> delete_transactions
 
         ex_from_src >> tf_and_stage >> load_into_db
+
+with DAG(dag_id="create_table", catchup=False, tags=["model"]) as create_table:
+    with TaskGroup("create", tooltip="Create Data lake") as create_table:
+        create_dbtable = create_dbtable
+        logging.info("Created tables")
+        create_dbtable

@@ -1,5 +1,6 @@
 from base import Base, engine
 from models import PprRawAll
 
-if __name__ == "__main__":
+def create_dbtable():
     Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)

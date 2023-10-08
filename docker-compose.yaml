@@ -94,17 +94,37 @@ services:
       POSTGRES_DB: airflow
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 10s
       retries: 5
       start_period: 5s
     restart: always
-
+  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: minhthanh1200@hotmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+    ports:
+       - "${PGADMIN_PORT:-5050}:80"
+    networks:
+       - postgres
+    restart: always
   redis:
     image: redis:latest
     expose:
       - 6379
+    networks:
+      - postgres
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -118,6 +138,8 @@ services:
     command: webserver
     ports:
       - "8080:8080"
+    networks:
+      - postgres
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 30s
@@ -133,6 +155,8 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
+    networks:
+      - postgres
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
       interval: 30s
@@ -260,7 +284,8 @@ services:
     user: "0:0"
     volumes:
       - ${AIRFLOW_PROJ_DIR:-.}:/sources
-
+    networks:
+      - postgres
   airflow-cli:
     <<: *airflow-common
     profiles:
@@ -284,6 +309,8 @@ services:
       - flower
     ports:
       - "5555:5555"
+    networks:
+      - postgres
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:5555/"]
       interval: 30s
@@ -295,6 +322,9 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-
+networks:
+  postgres:
+    driver: bridge
 volumes:
   postgres-db-volume:
+  pgadmin:

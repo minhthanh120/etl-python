@@ -2,10 +2,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.engine.url import URL
 
-CONNECTION_STRING = "Driver={ODBC Driver 17 for SQL Server};Server=SERAPHINE\\SQLEXPRESS;database=db_ETL;Trusted_Connection=Yes;MultipleActiveResultSets=true"
+CONNECTION_STRING = "postgresql://airflow:airflow@localhost:5432/airflow"
 
-connection_url = URL.create(
-    "mssql+pyodbc", query={"odbc_connect": CONNECTION_STRING})
-engine = create_engine(connection_url, echo=True)
+connection_url = URL.create(CONNECTION_STRING)
+engine = create_engine(CONNECTION_STRING , echo=True)
 Base = declarative_base()
-session = sessionmaker(engine)
+Session = sessionmaker(bind = engine)
+session = Session()
