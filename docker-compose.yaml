@@ -105,6 +105,18 @@ services:
       start_period: 5s
     restart: always
   
+  jupyter_notebook:
+    image: "jupyter/minimal-notebook"
+    container_name: jupyter_notebook
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+    ports:
+      - "8888:8888"
+    volumes:
+      - jupyter_notebook:/opt/jupyter_notebook
+    networks:
+      - postgres
+
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4
@@ -328,3 +340,4 @@ networks:
 volumes:
   postgres-db-volume:
   pgadmin:
+  jupyter_notebook:

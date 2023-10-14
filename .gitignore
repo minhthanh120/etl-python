@@ -8,3 +8,4 @@ venv/*
 logs/*
 dags/__pycache__/*
 plugins/__pycache__/*
+.vscode/

@@ -13,17 +13,17 @@ base_path = os.path.abspath(__file__ + "/../../")
 
 raw_path = f"{base_path}/data/raw/downloaded_at=2021-02-01/ppr-all.csv"
 
-@task
+
 def transform_case(input_string):
     return input_string.lower()
 
-@task
+
 def update_date_of_sale(date_input):
     current_format = datetime.strptime(date_input, "%d/%m/%Y")
     new_format = current_format.strftime("%Y-%m-%d")
     return new_format
 
-@task
+
 def update_description(description_input):
     description_input = transform_case(description_input)
     if "new" in description_input:
@@ -32,7 +32,6 @@ def update_description(description_input):
         return "second-hand"
     return description_input
 
-@task
 def update_price(price_input):
     price_input = price_input.replace("€", "")
     price_input = float(price_input.replace(",", ""))
