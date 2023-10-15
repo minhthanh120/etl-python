@@ -3,7 +3,7 @@ import csv
 from datetime import datetime
 import logging
 from models import PprRawAll
-from base import session
+from base import session, engine
 from sqlalchemy import text
 from airflow.models.dag import DAG
 from airflow.decorators import task
@@ -36,6 +36,7 @@ def update_price(price_input):
     price_input = price_input.replace("€", "")
     price_input = float(price_input.replace(",", ""))
     return int(price_input)
+
 
 @task
 def truncate_table():

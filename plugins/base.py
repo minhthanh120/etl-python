@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.engine.url import URL
 
-CONNECTION_STRING = "postgresql://airflow:airflow@postgres/airflow"
+CONNECTION_STRING = "postgresql://airflow:airflow@postgres/Property"
 
 connection_url = URL.create(CONNECTION_STRING)
 engine = create_engine(CONNECTION_STRING , echo=True)

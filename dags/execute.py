@@ -1,9 +1,8 @@
-import extract, transform, load
+import extract, transform, load, create_tables
 from airflow.models.dag import DAG
 from airflow.decorators import task
 from airflow.utils.task_group import TaskGroup
 from datetime import datetime
-from create_tables import create_dbtable
 import logging
 
 with DAG(dag_id="transform_new_data", start_date=datetime(2023, 1, 9), catchup=False, tags=["model"]) as transform_src:
@@ -36,8 +35,9 @@ with DAG(dag_id="transform_new_data", start_date=datetime(2023, 1, 9), catchup=F
 
         ex_from_src >> tf_and_stage >> load_into_db
 
-with DAG(dag_id="create_table", catchup=False, tags=["model"]) as create_table:
+with DAG(dag_id="create_table", start_date=datetime(2023, 1, 9), catchup=False, tags=["model"]) as create_table:
     with TaskGroup("create", tooltip="Create Data lake") as create_table:
-        create_dbtable = create_dbtable
+        create_db = create_tables.create_if_not_exist_db()
+        create_table = create_tables.create_dbtable()
         logging.info("Created tables")
-        create_dbtable
+        create_db >> create_table
